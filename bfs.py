@@ -13,22 +13,21 @@ def bfs(n, adj, start):
             if 0 <= to < n and not visited[to]:
                 visited[to] = True
                 queue.append(to)
-
     return order
 
 
-def read_ints(path: str):
-    ints = []
+def read_data(path: str):
+    num = []
     try:
         with open(path, "r", encoding="utf-8") as f:
-            for token in f.read().split():
+            for x in f.read().split():
                 try:
-                    ints.append(int(token))
+                    num.append(int(x))
                 except ValueError:
                     pass
     except FileNotFoundError:
         return None
-    return ints
+    return num
 
 def write_output(path: str, order):
     with open(path, "w", encoding="utf-8") as f:
@@ -36,17 +35,20 @@ def write_output(path: str, order):
 
 
 def main():
-    data = read_ints("input.txt")
+    data = read_data("input.txt")
     if not data or len(data) < 2:
         write_output("output.txt", [])
+        print("Не удалось прочитать данные/мало данных")
         return
     n, m = data[0], data[1]
-    if n <= 0 or m < 0:
+    if n < 0 or m < 0:
         write_output("output.txt", [])
+        print("Некоректные данные для графа: n>0 m>0")
         return
     need = 2 + 2 * m + 1
     if len(data) < need:
         write_output("output.txt", [])
+        print(f" Недостаточно чисел нужно минимум {need} ,а дано {len(data)} ")
         return
     adj = [[] for _ in range(n)]
     idx = 2
@@ -60,6 +62,7 @@ def main():
     start = data[idx]
     if not (0 <= start < n):
         write_output("output.txt", [])
+        print("Некоректная стартовая вершина ")
         return
 
     order = bfs(n, adj, start)
